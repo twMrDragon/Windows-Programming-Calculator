@@ -21,7 +21,8 @@ namespace Calculator
         // 累加數字
         private double accNumber = 0;
         // 暫存數字(連續點擊 = 時用到)
-        private double inputNumber = 0;
+        // 符合特定條件才需要更新
+        private double cacheNumber = 0;
         // 顯示數字(字串方便串接小數點)
         private string displayNumber = "0";
         // 紀錄上一個運算子(用於連續點擊等於時)
@@ -44,7 +45,7 @@ namespace Calculator
                 if (lastPressIsEqual)
                 {
                     accNumber = 0;
-                    inputNumber = 0;
+                    cacheNumber = 0;
                     lastPressIsEqual = false;
                 }
                 displayNumber = "0";
@@ -80,7 +81,7 @@ namespace Calculator
         private void processOperate(Operate operate)
         {
             // 記住當前輸入框內容
-            inputNumber = double.Parse(displayNumber);
+            cacheNumber = double.Parse(displayNumber);
             // true 時代表前一個結果已經計算出來，不用再計算
             if (!clearDisplay)
                 calculateWithLastOperate();
@@ -91,7 +92,7 @@ namespace Calculator
         public void processEqual()
         {
             if (!lastPressIsEqual)
-                inputNumber = double.Parse(displayNumber);
+                cacheNumber = double.Parse(displayNumber);
             lastPressIsEqual = true;
             calculateWithLastOperate();
             clearDisplay = true;
@@ -101,16 +102,16 @@ namespace Calculator
             switch (lastOperate)
             {
                 case Operate.PLUS:
-                    accNumber += inputNumber;
+                    accNumber += cacheNumber;
                     break;
                 case Operate.MINUS:
-                    accNumber -= inputNumber;
+                    accNumber -= cacheNumber;
                     break;
                 case Operate.TIMES:
-                    accNumber *= inputNumber;
+                    accNumber *= cacheNumber;
                     break;
                 case Operate.DIVISION:
-                    accNumber /= inputNumber;
+                    accNumber /= cacheNumber;
                     break;
                 default:
                     break;
@@ -125,17 +126,17 @@ namespace Calculator
         public void processMemoryRead()
         {
             this.displayNumber = this.memoryNumber.ToString();
-            this.inputNumber = this.memoryNumber;
+            this.cacheNumber = this.memoryNumber;
         }
         public void processMemoryPlus()
         {
             this.memoryNumber += double.Parse(this.displayNumber);
-            this.inputNumber = double.Parse(displayNumber);
+            this.cacheNumber = double.Parse(displayNumber);
         }
         public void processMemoryMinus()
         {
             this.memoryNumber -= double.Parse(this.displayNumber);
-            this.inputNumber = double.Parse(displayNumber);
+            this.cacheNumber = double.Parse(displayNumber);
         }
         public void processMemoryStore()
         {
