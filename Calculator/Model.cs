@@ -24,7 +24,7 @@ namespace Calculator
         // 符合特定條件才需要更新
         private double cacheNumber = 0;
         // 顯示數字(字串方便串接小數點)
-        private string displayNumber = "0";
+        private StringBuilder displayNumberStringBuilder = new StringBuilder("0");
         // 紀錄上一個運算子(用於連續點擊等於時)
         // 因為這變數只在意上一個運算的符號
         // 而且最後一個為 = 時要做的判斷恨不一樣，所以沒有把 = 放到 enum
@@ -48,19 +48,20 @@ namespace Calculator
                     cacheNumber = 0;
                     lastPressIsEqual = false;
                 }
-                displayNumber = "0";
+                displayNumberStringBuilder.Clear();
+                displayNumberStringBuilder.Append("0");
                 clearDisplay = false;
             }
 
             // 輸入數字
-            if (displayNumber == "0")
-                displayNumber = "";
-            displayNumber += digit.ToString();
+            if (displayNumberStringBuilder.ToString() == "0")
+                displayNumberStringBuilder.Clear();
+            displayNumberStringBuilder.Append(digit.ToString());
         }
         public void processDot()
         {
-            if (!displayNumber.Contains("."))
-                displayNumber += ".";
+            if (!displayNumberStringBuilder.ToString().Contains("."))
+                displayNumberStringBuilder.Append('.');
         }
         public void processPlus()
         {
@@ -81,7 +82,7 @@ namespace Calculator
         private void processOperate(Operate operate)
         {
             // 記住當前輸入框內容
-            cacheNumber = double.Parse(displayNumber);
+            cacheNumber = double.Parse(displayNumberStringBuilder.ToString());
             // true 時代表前一個結果已經計算出來，不用再計算
             if (!clearDisplay)
                 calculateWithLastOperate();
@@ -92,7 +93,7 @@ namespace Calculator
         public void processEqual()
         {
             if (!lastPressIsEqual)
-                cacheNumber = double.Parse(displayNumber);
+                cacheNumber = double.Parse(displayNumberStringBuilder.ToString());
             lastPressIsEqual = true;
             calculateWithLastOperate();
             clearDisplay = true;
@@ -116,7 +117,8 @@ namespace Calculator
                 default:
                     break;
             }
-            displayNumber = accNumber.ToString();
+            displayNumberStringBuilder.Clear();
+            displayNumberStringBuilder.Append(accNumber.ToString());
         }
         public void processMemoryClear()
         {
@@ -125,22 +127,27 @@ namespace Calculator
         }
         public void processMemoryRead()
         {
-            this.displayNumber = this.memoryNumber.ToString();
+            this.displayNumberStringBuilder.Clear();
+            this.displayNumberStringBuilder.Append(this.memoryNumber.ToString());
             this.cacheNumber = this.memoryNumber;
         }
         public void processMemoryPlus()
         {
-            this.memoryNumber += double.Parse(this.displayNumber);
-            this.cacheNumber = double.Parse(displayNumber);
+            double displayNumber = double.Parse(displayNumberStringBuilder.ToString());
+            this.memoryNumber += displayNumber;
+            this.cacheNumber = displayNumber;
         }
         public void processMemoryMinus()
         {
-            this.memoryNumber -= double.Parse(this.displayNumber);
-            this.cacheNumber = double.Parse(displayNumber);
+            double displayNumber = double.Parse(displayNumberStringBuilder.ToString());
+            this.memoryNumber -= displayNumber;
+            this.cacheNumber = displayNumber;
         }
         public void processMemoryStore()
         {
-            this.memoryNumber = double.Parse(this.displayNumber);
+
+            double displayNumber = double.Parse(displayNumberStringBuilder.ToString());
+            this.memoryNumber = displayNumber;
             this.clearDisplay = true;
         }
         public void processClear()
@@ -150,11 +157,12 @@ namespace Calculator
         }
         public void processClearEntry()
         {
-            this.displayNumber = "0";
+            this.displayNumberStringBuilder.Clear();
+            this.displayNumberStringBuilder.Append("0");
         }
         public string getDisplayNumber()
         {
-            return displayNumber;
+            return this.displayNumberStringBuilder.ToString();
         }
     }
 }
