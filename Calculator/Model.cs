@@ -47,6 +47,7 @@ namespace Calculator
                     accNumber = 0;
                     cacheNumber = 0;
                     lastPressIsEqual = false;
+                    lastOperate = Operate.PLUS;
                 }
                 displayNumberStringBuilder.Clear();
                 displayNumberStringBuilder.Append("0");
@@ -145,7 +146,6 @@ namespace Calculator
         }
         public void processMemoryStore()
         {
-
             double displayNumber = double.Parse(displayNumberStringBuilder.ToString());
             this.memoryNumber = displayNumber;
             this.clearDisplay = true;
@@ -153,6 +153,7 @@ namespace Calculator
         public void processClear()
         {
             this.accNumber = 0;
+            this.lastOperate = Operate.PLUS;
             processClearEntry();
         }
         public void processClearEntry()
