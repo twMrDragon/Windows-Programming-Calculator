@@ -10,10 +10,10 @@ namespace Calculator
     {
         private enum Operate
         {
-            PLUS,
-            MINUS,
-            TIMES,
-            DIVISION
+            Plus,
+            Minus,  
+            Times,
+            Division
         }
 
         // 記憶體數字
@@ -28,7 +28,7 @@ namespace Calculator
         // 紀錄上一個運算子(用於連續點擊等於時)
         // 因為這變數只在意上一個運算的符號
         // 而且最後一個為 = 時要做的判斷恨不一樣，所以沒有把 = 放到 enum
-        private Operate lastOperate = Operate.PLUS;
+        private Operate lastOperate = Operate.Plus; 
 
         // flag
         // 連續按下 = 鍵時，第一次需要記住輸入框的內容
@@ -47,7 +47,7 @@ namespace Calculator
                     accNumber = 0;
                     cacheNumber = 0;
                     lastPressIsEqual = false;
-                    lastOperate = Operate.PLUS;
+                    lastOperate = Operate.Plus;
                 }
                 displayNumberStringBuilder.Clear();
                 displayNumberStringBuilder.Append("0");
@@ -66,19 +66,19 @@ namespace Calculator
         }
         public void processPlus()
         {
-            processOperate(Operate.PLUS);
+            processOperate(Operate.Plus);
         }
         public void processMinus()
         {
-            processOperate(Operate.MINUS);
+            processOperate(Operate.Minus);
         }
         public void processTimes()
         {
-            processOperate(Operate.TIMES);
+            processOperate(Operate.Times);
         }
         public void processDivsion()
         {
-            processOperate(Operate.DIVISION);
+            processOperate(Operate.Division);
         }
         private void processOperate(Operate operate)
         {
@@ -103,16 +103,16 @@ namespace Calculator
         {
             switch (lastOperate)
             {
-                case Operate.PLUS:
+                case Operate.Plus:
                     accNumber += cacheNumber;
                     break;
-                case Operate.MINUS:
+                case Operate.Minus:
                     accNumber -= cacheNumber;
                     break;
-                case Operate.TIMES:
+                case Operate.Times:
                     accNumber *= cacheNumber;
                     break;
-                case Operate.DIVISION:
+                case Operate.Division:
                     accNumber /= cacheNumber;
                     break;
                 default:
@@ -153,7 +153,7 @@ namespace Calculator
         public void processClear()
         {
             this.accNumber = 0;
-            this.lastOperate = Operate.PLUS;
+            this.lastOperate = Operate.Plus;
             processClearEntry();
         }
         public void processClearEntry()
